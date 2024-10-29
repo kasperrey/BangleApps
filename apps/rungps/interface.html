@@ -16,7 +16,7 @@
       dataElement.innerHTML = "<ul>";
       for (let file of files) {
         dataElement.innerHTML += `<li>${file}</li>`;
-        dataElement.innerHTML += `<li><button id="${file}">Download</button><li/>`
+        dataElement.innerHTML += `<li><button onClick="selectFile(${file})">Download</button><li/>`
         document.getElementById(file).addEventListener("click", () => selectFile(file));
       }
       dataElement.innerHTML += "<ul/>";
