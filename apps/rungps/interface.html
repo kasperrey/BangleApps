@@ -4,7 +4,6 @@
 </head>
 <body>
 <div id="data"></div>
-<button class="btn btn-default" id="btnSave">Save</button>
 
 <script src="../../core/lib/interface.js"></script>
 <script>
@@ -16,7 +15,6 @@
     Puck.eval(`require("Storage").list(/rungps\\..+\\.csv$/,{sf:1})`,files=>{
       dataElement.innerHTML = "<ul>";
       for (let file of files) {
-        console.log(file);
         dataElement.innerHTML += `<li>${file}</li>`;
         dataElement.innerHTML += `<li><button id="${file}">Download</button><li/>`
         document.getElementById(file).addEventListener("click", () => selectFile(file));
@@ -26,6 +24,7 @@
   }
 
   function selectFile(fileName) {
+    console.log(fileName);
     Util.showModal("Loading...");
     // get the data
     dataElement.innerHTML = "";
@@ -38,13 +37,10 @@
         dataElement.innerHTML = "<b>No data found</b>";
         return;
       }
+      Util.saveCSV("gpsdata", csvData);
       dataElement.innerHTML = "<b>"+fileName+"</b>"
     });
   }
-
-  document.getElementById("btnSave").addEventListener("click", function() {
-    Util.saveCSV("gpsdata", csvData);
-  });
 
   function onInit() {
     getData();
