@@ -16,8 +16,8 @@
     Puck.eval(`require("Storage").list(/rungps\\..+\\.csv$/,{sf:1})`,files=>{
       dataElement.innerHTML = "<ul>";
       for (let file of files) {
-        console.log(`<li><button onClick='selectFile(${file})'>${file}</button></li>`);
-        dataElement.innerHTML +=`<li><button onClick='selectFile(${file})'>${file}</button></li>`;
+        console.log(`<li><button onClick='selectFile("${file}")'>${file}</button></li>`);
+        dataElement.innerHTML +=`<li><button onClick='selectFile("${file}")'>${file}</button></li>`;
       }
       dataElement.innerHTML += "<ul/>";
     });
