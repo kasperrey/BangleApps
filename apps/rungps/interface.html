@@ -17,7 +17,9 @@
       dataElement.innerHTML = "<ul>";
       for (let file of files) {
         dataElement.innerHTML +=`<li><button onClick="selectFile(${file})">${file}</button></li>`;
+        console.log(dataElement.innerHTML);
       }
+      dataElement.innerHTML += "<ul/>";
     });
   }
 
