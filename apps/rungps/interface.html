@@ -16,8 +16,12 @@
       dataElement.innerHTML = "<ul>";
       for (let file of files) {
         dataElement.innerHTML += `<li>${file}</li>`;
-        dataElement.innerHTML += `<li><button onClick="selectFile(${file})">Download</button><li/>`
+        dataElement.innerHTML += `<li><button value="${file}">Download</button><li/>`
       }
+      var buttons = dataElement.querySelectorAll("button");
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => selectFile(button.value));
+      });
       dataElement.innerHTML += "<ul/>";
     });
   }
