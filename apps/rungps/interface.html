@@ -21,8 +21,8 @@
       var buttons = dataElement.querySelectorAll("button");
       buttons.forEach((button) => {
         button.addEventListener("click", () => selectFile(button.value));
+        console.log(button.value);
       });
-      console.log(button.value);
       dataElement.innerHTML += "<ul/>";
     });
   }
