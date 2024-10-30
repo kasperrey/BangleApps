@@ -20,8 +20,11 @@
       }
       var buttons = dataElement.querySelectorAll("button");
       buttons.forEach((button) => {
-        button.addEventListener("click", () => selectFile(button.value));
-        console.log(button.value);
+        button.addEventListener("click", () => {
+          console.log("click");
+          selectFile(button.value);
+        });
+        console.log(button);
       });
       dataElement.innerHTML += "<ul/>";
     });
