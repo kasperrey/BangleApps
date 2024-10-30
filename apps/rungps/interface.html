@@ -13,20 +13,19 @@
   function getData() {
     dataElement.innerHTML = "";
     Puck.eval(`require("Storage").list(/rungps\\..+\\.csv$/,{sf:1})`,files=>{
-      dataElement.innerHTML = "<ul>";
       for (let file of files) {
-        dataElement.innerHTML += `<li>${file}</li>`;
-        dataElement.innerHTML += `<li><button value="${file}">Download</button><li/>`
-      }
-      var buttons = dataElement.querySelectorAll("button");
-      buttons.forEach((button) => {
-        button.addEventListener("click", () => {
-          console.log("click");
-          selectFile(button.value);
+        var text = document.createElement("p");
+        text.innerText = file;
+        document.body.appendChild(text);
+        var button = document.createElement("button");
+        button.innerText = "Download";
+        button.value = file;
+        button.addEventListener("click", (event) => {
+          console.log(event.currentTarget.value);
+          selectFile(event.currentTarget.value);
         });
-        console.log(button);
-      });
-      dataElement.innerHTML += "<ul/>";
+      }
+
     });
   }
 
