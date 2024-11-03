@@ -30,6 +30,57 @@
     });
   }
 
+  function translateData(text) {
+    var points = []
+    for (var line of text.split("\n")) {
+      var all = line.split(", ");
+      if (all.length === 7) {
+        let [time_seconds, lat, lon, alt, speed, course, heart_rate] = all;
+        points.push({lat: parseFloat(lat), long: parseFloat(lon), time: time_seconds, heart_rate: heart_rate, speed: speed, alt: alt});
+      }
+    }
+    return points;
+  }
+
+  function secondsToUTC(seconds) {
+    var date = new Date(seconds);
+    return date.toISOString();
+  }
+
+  function saveGPX(fileName, csv) {
+    // filter out coords with no GPS (or allow, but force to 0)
+    var points = translateData(csv);
+    // Output GPX
+    var gpx = `<?xml version="1.0" encoding="UTF-8"?>
+<gpx creator="Bangle.js" version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+  <metadata>
+    <time>${secondsToUTC(points[0].time)}</time>
+  </metadata>
+  <trk>
+    <name>${fileName}</name>
+    <trkseg>`;
+    points.forEach(point=>{
+      gpx += `
+      <trkpt lat="${point.lat}" lon="${point.long}">
+        <ele>${point.alt}</ele>
+        <time>${secondsToUTC(point.time)}</time>
+        <extensions>
+            <gpxtpx:TrackPointExtension>
+                ${point.heart_rate ? `<gpxtpx:hr>${point.heart_rate}</gpxtpx:hr>`:``}
+            </gpxtpx:TrackPointExtension>
+        </extensions>
+      </trkpt>`;
+
+    });
+    // https://www8.garmin.com/xmlschemas/TrackPointExtensionv1.xsd
+    gpx += `
+    </trkseg>
+  </trk>
+</gpx>`;
+    Util.saveFile(fileName+".gpx", "application/gpx+xml", gpx);
+    showToast("Download finished.", "success");
+  }
+
   function selectFile(fileName) {
     console.log(fileName);
     Util.showModal("Loading...");
@@ -44,6 +95,7 @@
         dataElement.innerHTML = "<b>No data found</b>";
         return;
       }
+      saveGPX(fileName, csvData);
       Util.saveCSV("gpsdata", csvData);
       dataElement.innerHTML = "<b>"+fileName+"</b>"
     });
