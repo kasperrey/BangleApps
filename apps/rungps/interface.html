@@ -95,8 +95,8 @@
         dataElement.innerHTML = "<b>No data found</b>";
         return;
       }
-      saveGPX(fileName, csvData);
       Util.saveCSV("gpsdata", csvData);
+      saveGPX(fileName, csvData);
       dataElement.innerHTML = "<b>"+fileName+"</b>"
     });
   }
